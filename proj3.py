@@ -126,9 +126,9 @@ times, trips = splitInput(raw)
 times = list(map(lambda x : [int(x[0]), int(x[1]), float(x[2])], times))
 trips = [[int(float(j)) for j in i] for i in trips]
 
-passengers = []
+passengers = {}
 for i in range(0, len(trips)):
-    passengers.append(trips[i])
+    passengers[str(trips[i])] = [trips[i][0], i]
 
 # print(passengers)
 # Set of vertices and its length
@@ -190,17 +190,17 @@ while (len(passengers) and len(sorted_inconveniences)):
     passenger2 = minimum[1]
     trip = minimum[3]
 
-    final_trips.append([passengers.index(passenger1), passengers.index(passenger2), trip])
+    final_trips.append([passengers[str(passenger1)][1], passengers[str(passenger2)][1], trip])
 
-    passengers.remove(passenger1)
-    passengers.remove(passenger2)
+    del passengers[str(passenger1)]
+    del passengers[str(passenger2)]
 
     # print(passenger1, passenger2)
     sorted_inconveniences = list(filter(lambda x : x[0] != passenger1 and x[1] != passenger1 and x[0] != passenger2 and x[1] != passenger2, sorted_inconveniences))
 
 # let the remaining passengers in individual trips
 for item in passengers:
-    final_trips.append([passengers.index(item), item])
+    final_trips.append([passengers[str(item)][1], item])
 
 # [pass1, pass2, path] or [pass1, path]
 print(final_trips)
