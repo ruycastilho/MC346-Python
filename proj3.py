@@ -111,6 +111,13 @@ def getInconvenience(trip1, trip2, path, times):
 
     return max(inconvenience1, inconvenience2)
 
+def print_result(results):
+    for item in results:
+        if (len(item) == 3):
+            print('passageiros:', item[0]+1, item[1]+1, 'percurso:',*item[2], sep=' ')
+        else:
+            print('passageiro:', item[0]+1,  'percurso:', *item[2], sep=' ')
+
 # Main
 
 raw = []
@@ -177,7 +184,7 @@ for trip in all_trips(vertices):
 
 # select min inconvenience, remove all remaining trips that include either start or end from selected min inconvenience
 sorted_inconveniences = sorted(inconveniences, key=itemgetter(2))
-
+print('here')
 final_trips = []
 
 while (len(passengers) and len(sorted_inconveniences)):
@@ -203,4 +210,4 @@ for item in passengers:
     final_trips.append([passengers[str(item)][1], item])
 
 # [pass1, pass2, path] or [pass1, path]
-print(final_trips)
+print_result(final_trips)
