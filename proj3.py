@@ -6,7 +6,7 @@ from operator import itemgetter
 
 def splitInput(x):
     index = 0
-    while (x[index] != ['']):
+    while (x[index] != []):
         index += 1
 
     return x[:index], x[index+1:]
@@ -79,8 +79,8 @@ raw = []
 
 # Input and parsing
 for line in sys.stdin:
-    words =line.rstrip(" \n\r").split(' ')
-    raw.append(words)
+    line =line.strip(" \n\r").split()
+    raw.append(line)
 
 times, trips = splitInput(raw)
 
