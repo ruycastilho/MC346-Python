@@ -11,27 +11,16 @@ def splitInput(x):
 
     return x[:index], x[index+1:]
 
-def floydMarshall(dist, paths, n):
+def floydMarshall(dist, n):
     for k in range(0, n):
        for i in range(0, n):
           for j in range(0, n):
              if (dist[i][j] > dist[i][k] + dist[k][j] ):
                 dist[i][j] = dist[i][k] + dist[k][j]
-                paths[i][j] =  paths[i][k]
 
-    return dist, paths
+    return dist
 
-# def reconstructPath(min_path, paths):
-#     path = [min_path[0]]
-#     for i in range(0, len(min_path)-1):
-#         start = min_path[i]
-#         end = min_path[i+1]
-#         while (start != end):
-#             start = paths[start][end]
-#             path.append(start)
-#     return path
-
-def getInconvenience(trip1, trip2, times, paths):
+def getInconvenience(trip1, trip2, times):
     inconveniences = [[0,0]]*4
     
     if (len(trip1) == 3):
@@ -110,7 +99,6 @@ amount_of_vertices = len(vertices)
 # Floyd-Marshall's arrays
 
 travelTimes = np.full((amount_of_vertices,amount_of_vertices), math.inf)
-paths = np.full((amount_of_vertices, amount_of_vertices), None)
 
 # Seting existing weights
 
@@ -119,11 +107,10 @@ for item in times:
     end = item[1]
     weight = item[2]
     travelTimes[start][end] = weight
-    paths[start][end] = end
 
 # Floyd Marshall
 
-min_times, path_reconstruction = floydMarshall(travelTimes, paths, amount_of_vertices)
+min_times = floydMarshall(travelTimes, amount_of_vertices)
 
 # Calculating inconveniences
 inconveniences = []
@@ -135,7 +122,7 @@ for i in range(0, amount_of_passengers):
     for j in range(i+1, amount_of_passengers):
         pass1 = trips[i]
         pass2 = trips[j]
-        inconvenience, path = getInconvenience(pass1, pass2, min_times, path_reconstruction)
+        inconvenience, path = getInconvenience(pass1, pass2, min_times)
         if (inconvenience != None):
             inconveniences.append([i, j, inconvenience, path])
 
@@ -161,8 +148,10 @@ while (amount_of_passengers and len(sorted_inconveniences)):
 
 # let the remaining passengers in individual trips
 for item in passengers:
-    final_trips.append([item, trips[item]])
+    if (len(trips[item]) == 2):
+        final_trips.append([item, trips[item]])
+    else:
+        final_trips.append([item, trips[item][1:]])
 
-print(final_trips)
 # [pass1, pass2, path] or [pass1, path]
 print_result(final_trips)
