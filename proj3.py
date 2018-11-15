@@ -151,7 +151,7 @@ for item in passengers:
     if (len(trips[item]) == 2):
         final_trips.append([item, trips[item]])
     else:
-        final_trips.append([item, trips[item][1:]])
+        final_trips.append([item, [trips[item][2], trips[item][1]]])
 
 # [pass1, pass2, path] or [pass1, path]
 print_result(final_trips)
